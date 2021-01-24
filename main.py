@@ -1,7 +1,12 @@
 import cv2 as cv
 from PIL import Image
+import configparser
 
-img = cv.imread('pic.png',0)
+config = configparser.ConfigParser()
+config.read("config.ini")
+SOURCE = config['files Path']['sourceFile']
+DESTINATION = config['files Path']['destinationFile']
+img = cv.imread(SOURCE,0)
 _ = img.shape
 
 for i in range(_[0]):
@@ -9,8 +14,8 @@ for i in range(_[0]):
         if img[i,j] > 200:
             img[i,j] = 255
                   
-cv.imwrite('newImage.png',img)
-img = Image.open('newImage.png')
+cv.imwrite(DESTINATION,img)
+img = Image.open(DESTINATION)
 img = img.convert("RGBA")
 datas = img.getdata()
 newData = []
@@ -26,4 +31,4 @@ for item in datas:
 
 
 img.putdata(newData)
-img.save("newImage.png", "PNG")
+img.save(DESTINATION, "PNG")
